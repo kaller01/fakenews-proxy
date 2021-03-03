@@ -21,20 +21,12 @@ app.use(async (req, res) => {
     .then((response) => {
       console.log(response.status + "  " + req.url);
       //Same status as response
-      console.log(response.headers["content-type"].includes("image"));
       res.status(response.status);
       if (
         req.url.includes("http://zebroid.ida.liu.se/fakenews/") &&
         response.headers["content-type"].includes("text")
       ) {
         res.end(addFakenews(ab2str(response.data)));
-      } else if (
-        req.url.includes("http://zebroid.ida.liu.se/fakenews/") &&
-        !response.headers["content-type"].includes("text")
-      ) {
-        //Image buffer
-        res.end(Buffer.from(response.data, "base64"));
-        //Let all else pass normally
       } else res.end(response.data);
     })
     .catch((error) => {
